@@ -1,12 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.API_KEY;
-if (!API_KEY) {
-  throw new Error("API_KEY 环境变量未设置。");
-}
-const ai = new GoogleGenAI({ apiKey: API_KEY });
-
 // This interface should ideally be shared from a types file, but defining it here is fine for this structure.
 interface StyleParams {
   lineWeight?: '纤细' | '常规' | '粗重';
@@ -42,6 +36,12 @@ function getStyleParamInstructions(styleParams: StyleParams): string {
 }
 
 export async function generateSketchFromText(text: string, title: string, aspectRatio: string, style: string, styleParams: StyleParams): Promise<string> {
+  const API_KEY = process.env.API_KEY;
+  if (!API_KEY) {
+    throw new Error("API_KEY 环境变量未设置。");
+  }
+  const ai = new GoogleGenAI({ apiKey: API_KEY });
+
   const visualStyle = styleInstructions[style] || styleInstructions['彩色铅笔'];
   const paramInstructions = getStyleParamInstructions(styleParams);
   try {
